@@ -6,7 +6,7 @@ namespace GenericHostWPFbyHand
 {
     public partial class App : Application
     {
-        private readonly IHost _Host = Host.CreateDefaultBuilder()
+        private readonly IHost _host = Host.CreateDefaultBuilder()
             .ConfigureServices((context, services) =>
             {
                 services.AddSingleton<MainWindow>();
@@ -15,15 +15,17 @@ namespace GenericHostWPFbyHand
 
         protected override async void OnStartup(StartupEventArgs e)
         {
-            await _Host.StartAsync();
-            _Host.Services.GetRequiredService<MainWindow>().Show();
+            await _host.StartAsync();
+            _host.Services.GetRequiredService<MainWindow>().Show();
             base.OnStartup(e);
         }
 
         protected override async void OnExit(ExitEventArgs e)
         {
-            await _Host.StopAsync();
-            _Host.Dispose();
+            using (_host)
+            {
+                await _host.StopAsync();
+            }
             base.OnExit(e);
         }
     }
