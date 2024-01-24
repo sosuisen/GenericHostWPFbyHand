@@ -6,7 +6,7 @@ namespace GenericHostWPFbyHand
 {
     public partial class App : Application
     {
-        private readonly IHost _Host = Host.CreateDefaultBuilder()
+        private readonly IHost _host = Host.CreateDefaultBuilder()
             .ConfigureServices((context, services) =>
             {
                 services.AddSingleton<MainWindow>();
@@ -15,14 +15,17 @@ namespace GenericHostWPFbyHand
 
         private async void StartupHandler(object sender, StartupEventArgs e)
         {
-            await _Host.StartAsync();
-            _Host.Services.GetRequiredService<MainWindow>().Show();
+            await _host.StartAsync();
+            _host.Services.GetRequiredService<MainWindow>().Show();
         }
 
         private async void ExitHandler(object sender, ExitEventArgs e)
         {
-            await _Host.StopAsync();
-            _Host.Dispose();
+            // Use using to ensure that the host is disposed if exceptions are thrown in StopAsync
+            using (_host)
+            {
+                await _host.StopAsync();
+            }
         }
     }
 }
