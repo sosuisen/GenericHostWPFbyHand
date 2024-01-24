@@ -13,18 +13,16 @@ namespace GenericHostWPFbyHand
             })
             .Build();
 
-        protected override async void OnStartup(StartupEventArgs e)
+        private async void StartupHandler(object sender, StartupEventArgs e)
         {
             await _Host.StartAsync();
             _Host.Services.GetRequiredService<MainWindow>().Show();
-            base.OnStartup(e);
         }
 
-        protected override async void OnExit(ExitEventArgs e)
+        private async void ExitHandler(object sender, ExitEventArgs e)
         {
             await _Host.StopAsync();
             _Host.Dispose();
-            base.OnExit(e);
         }
     }
 }
